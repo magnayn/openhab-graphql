@@ -1,0 +1,254 @@
+""" --------------------------------------------------------------------------------------------------
+Items
+
+openHAB has a strict separation between the physical world (the "Things", see below) and the application,
+which is built around the notion of "Items" (also called the virtual layer).
+
+Items represent functionality that is used by the application (mainly user interfaces or automation logic).
+Items have a state and are used through events.
+-------------------------------------------------------------------------------------------------- """
+
+# TODO: Subtype?
+interface Item {
+
+    """
+    uid is a synonym for 'name' within Items
+    """
+    uid: ID!
+    name: String!
+
+    """
+    Type: e.g: Switch, Dimmer, Group. Think this is fixed.
+    """
+    type: String!
+    label: String!
+    category: String!
+    tags: [String!]!
+    groupNames: [String!]!
+
+    commandDescription: CommandDescription
+
+    """
+    extra metadata - e.g
+    "homekit": {
+    "value": "Thermostat.CurrentHeatingCoolingMode"
+    }
+    or
+    "semantics": {
+    "value": "Point_Control_Switch",
+    "config": {
+    "isPointOf": "Garden_Switch"
+    }
+    }
+    """
+    # todo: relation to subtypes?
+    metadata: ItemMetadata
+    editable: Boolean
+
+    namespaces: String!
+
+
+    state: State
+
+    channels: [Channel!]!
+}
+
+interface ItemMetadata {
+    metadata: JSON
+}
+
+type Metadata implements ItemMetadata {
+    metadata: JSON
+}
+
+interface State {
+    transformedState: String
+    stateDescription: StateDescription
+}
+
+type GenericItem implements Item {
+    uid: ID!
+    name: String!
+    type: String!
+    label: String!
+    category: String!
+    tags: [String!]!
+    groupNames: [String!]!
+    commandDescription: CommandDescription
+    metadata: ItemMetadata
+    editable: Boolean
+    namespaces: String!
+    state: State
+    channels: [Channel!]!
+
+    groups: [GroupItem!]!
+}
+
+type GroupItem implements Item {
+    uid: ID!
+    name: String!
+    type: String!
+    label: String!
+    category: String!
+    tags: [String!]!
+    groupNames: [String!]!
+    commandDescription: CommandDescription
+    metadata: ItemMetadata
+    editable: Boolean
+    namespaces: String!
+    state: State
+    channels: [Channel!]!
+
+    baseItem: Item
+    members: [Item!]!
+}
+
+"""
+States
+"""
+type DateTimeState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    state: DateTime
+}
+
+type StringState implements State
+{
+    transformedState: String
+    stateDescription: StateDescription
+
+    state: String
+}
+
+type CallItemState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    state: [String!]!
+}
+
+enum PlayerItemStateEnum {
+    PLAY,PAUSE,REWIND,FASTFORWARD
+}
+
+type PlayerItemState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    state: PlayerItemStateEnum
+}
+
+enum ContactItemStateEnum {
+    OPEN, CLOSED
+}
+
+type ContactItemState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    state: ContactItemStateEnum
+}
+
+type ImageItemState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    mimeType: String
+    bytes: Base64
+}
+
+enum OnOffEnum {
+    ON, OFF
+}
+
+
+type OnOffState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    value: OnOffEnum
+}
+
+type PercentState {
+    percent: Int
+}
+
+type DimmerState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    percent: Int
+}
+
+
+
+type HSBState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    hue: Float
+    saturation: Float
+    brightness: Float
+}
+
+
+enum UpDownEnum {
+    UP, DOWN
+}
+
+type UpDownState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    position: UpDownEnum
+}
+
+
+type DecimalState  implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    number: Float
+    unitSymbol: String
+}
+
+type QuantityType implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    quantity: Float
+    unitSymbol: String
+}
+
+type LocationState implements State {
+    transformedState: String
+    stateDescription: StateDescription
+
+    lon: Float
+    lat: Float
+    altitute: Float
+}
+
+type StateDescription {
+    minimum: Float
+    maximum: Float
+    step: Float
+    pattern: String
+    readOnly: Boolean
+    options: [StateOption!]!
+}
+
+type StateOption {
+    value: String
+    label: String
+}
+
+type CommandDescription {
+    commandOptions: [CommandOption!]!
+}
+
+type CommandOption {
+    command: String
+    label: String
+}

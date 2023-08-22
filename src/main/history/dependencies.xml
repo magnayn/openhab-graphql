@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.6.0" name="org.openhab.io.graphql-4.1.0-SNAPSHOT">
+    <feature version="0.0.0">
+        <feature>openhab-runtime-base</feature>
+        <feature>wrap</feature>
+        <bundle>mvn:com.graphql-java/graphql-java-extended-scalars/20.2</bundle>
+        <bundle>mvn:com.graphql-java/graphql-java/21.0</bundle>
+        <bundle>mvn:com.graphql-java/java-dataloader/3.2.0</bundle>
+        <bundle>mvn:io.reactivex.rxjava2/rxjava/2.2.17</bundle>
+        <bundle>mvn:javax.servlet/javax.servlet-api/3.1.0</bundle>
+        <bundle>mvn:org.eclipse.jetty.websocket/websocket-api/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty.websocket/websocket-client/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty.websocket/websocket-common/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty.websocket/websocket-server/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty.websocket/websocket-servlet/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty/jetty-http/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty/jetty-io/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty/jetty-security/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty/jetty-servlet/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty/jetty-util-ajax/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.eclipse.jetty/jetty-util/9.4.46.v20220331</bundle>
+        <bundle>mvn:org.openhab.addons.bundles/org.openhab.io.graphql/4.1.0-SNAPSHOT</bundle>
+        <bundle>mvn:org.reactivestreams/reactive-streams/1.0.3</bundle>
+        <bundle>mvn:org.scala-lang/scala-library/2.12.2</bundle>
+        <bundle>mvn:org.slf4j/slf4j-api/1.7.30</bundle>
+        <bundle>wrap:mvn:org.lastnpe.eea/eea-all/2.2.1</bundle>
+    </feature>
+</features>

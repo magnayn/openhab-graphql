@@ -1,0 +1,19 @@
+
+type AudioSource
+{
+    id: String!
+    label: String
+}
+
+type AudioSink
+{
+    id: String!
+    label: String
+}
+
+type Audio {
+    defaultSource: AudioSource!
+    sources: [AudioSource!]!
+    defaultSink: AudioSink
+    sinks: [AudioSink!]!
+}

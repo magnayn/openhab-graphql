@@ -1,0 +1,72 @@
+type ThingType {
+    uid: ID!
+    label: String!
+    description: String
+    category: String
+    listed: Boolean!
+    supportedBridgeTypes: [ThingType!]!
+    bridge: Boolean
+
+    channels: [ChannelDefinition!]!
+    channelGroups: [ChannelGroupDefinition!]!
+
+    configDescription: ConfigDescription!
+
+    # JSON
+    properties: JSON!
+    extensibleChannelTypeIds: [String!]!
+}
+
+"""
+ChannelDefinition
+"""
+type ChannelDefinition {
+    uid: ID!
+
+    id: String
+    description: String
+    label: String
+    tags: [String!]!
+    #JSON
+    properties: JSON!
+    category: String
+    stateDescription: StateDescription
+    advanced: Boolean!
+
+    channelType: ChannelType
+
+}
+
+type ChannelGroupDefinition {
+    uid: ID!
+    id: String
+    description: String
+    label: String
+
+    channels: [ChannelDefinition!]!
+}
+
+
+enum ChannelKind {
+    STATE
+    TRIGGER
+}
+
+
+
+type ChannelType {
+    uid: ID!
+
+    description: String
+    label: String
+    category: String
+    itemType: String
+    kind: ChannelKind!
+    stateDescription: StateDescription!
+    tags: [String!]!
+    advanced: Boolean!
+    commandDescription: CommandDescription!
+    linkableItemTypes: [String!]!
+    configDescription: ConfigDescription!
+
+}

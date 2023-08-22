@@ -1,0 +1,36 @@
+"""------------------------------
+Actions
+------------------------------"""
+type ThingAction {
+    uid: ID!
+    label: String
+    description: String
+    inputs: [Input!]!
+    outputs: [Output!]!
+}
+
+
+type Input {
+    name: String
+    type: String
+    label: String
+    description: String
+    required: Boolean
+    tags: [String!]!
+    reference: String
+    defaultValue: String
+}
+
+type Output {
+    name: String
+    type: String
+    tags: [String!]!
+    label: String
+    description: String
+    reference: String
+    defaultValue: String
+}
+
+extend type Thing {
+    actions: [ThingAction!]!
+}

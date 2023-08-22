@@ -1,0 +1,81 @@
+"""
+Events
+"""
+
+interface Event {
+    topic: String!
+    payload: String!
+    source: String
+}
+
+interface ItemEvent implements Event {
+    topic: String!
+    payload: String!
+    source: String
+    item: Item
+}
+
+type ItemCommandEvent implements ItemEvent & Event {
+    topic: String!
+    payload: String!
+    source: String
+    item: Item
+
+    command: String
+}
+
+type ItemStateEvent implements ItemEvent & Event {
+    topic: String!
+    payload: String!
+    source: String
+    item: Item
+
+    state: State
+}
+
+type ItemStateChangedEvent implements ItemEvent  & Event {
+    topic: String!
+    payload: String!
+    source: String
+    item: Item
+
+    oldState: State
+    newState: State
+}
+
+type GroupItemStateChangedEvent implements ItemEvent & Event {
+    topic: String!
+    payload: String!
+    source: String
+    item: Item
+
+    memberName: String!
+}
+
+type ItemStateUpdatedEvent implements ItemEvent & Event {
+    topic: String!
+    payload: String!
+    source: String
+    item: Item
+
+    state: State
+}
+
+type GroupItemStateUpdatedEvent implements ItemEvent & Event {
+    topic: String!
+    payload: String!
+    source: String
+    item: Item
+
+    memberName: String!
+}
+
+type ItemStatePredictedEvent implements ItemEvent & Event {
+    topic: String!
+    payload: String!
+    source: String
+    item: Item
+
+    predictedState: State!
+    isConfirmation: Boolean!
+}

@@ -1,0 +1,47 @@
+
+enum ConfigType {
+    TEXT, INTEGER, DECIMAL, BOOLEAN
+}
+
+type ConfigDescription {
+    uid: ID!
+    parameters: [ConfigDescriptionParameter!]!
+    parameterGroups: [ConfigDescriptionParameterGroup!]!
+}
+
+type ConfigDescriptionParameter {
+    context: String
+    defaultValue: String
+    description: String
+    label: String
+    name: String
+    required: Boolean!
+    type: ConfigType!
+
+    min: Float
+    max: Float
+    stepsize: Float
+    pattern: String
+    readOnly: Boolean
+    multiple: Boolean
+    multipleLimit: Int
+    #TODO : or to group ?
+    groupName: String
+    adanced: Boolean!
+    verify: Boolean
+    limitToOptions: Boolean!
+    unit: String
+    unitLabel: String
+
+    options: [ParameterOption!]!
+    filterCriteria: [FilterCriteria!]!
+
+}
+
+type ConfigDescriptionParameterGroup {
+    name: String
+    context: String
+    advanced: Boolean!
+    label: String
+    description: String
+}

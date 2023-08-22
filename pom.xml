@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.openhab.addons.bundles</groupId>
+    <artifactId>org.openhab.addons.reactor.bundles</artifactId>
+    <version>4.1.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <slf4j.version>1.7.32</slf4j.version>
+    <bnd.importpackage>org.checkerframework.*;resolution:=optional,javax.annotation.meta.*;resolution:=optional,com.google.errorprone.*;resolution:=optional,com.google.gson.*;resolution:=optional</bnd.importpackage>
+  </properties>
+
+  <artifactId>org.openhab.io.graphql</artifactId>
+
+  <name>openHAB Add-ons :: Bundles :: IO :: GraphQL</name>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.github.kobylynskyi</groupId>
+        <artifactId>graphql-codegen-maven-plugin</artifactId>
+        <version>5.8.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <!-- all config options:
+                https://github.com/kobylynskyi/graphql-java-codegen/blob/main/docs/codegen-options.md
+              -->
+              <typesAsInterfaces>Channel,Thing,Bridge,ThingType,ChannelType,ChannelDefinition,ChannelGroupDefinition,ConfigDescription,ConfigDescriptionParameter,ConfigDescriptionParameterGroup,ItemCommandEvent,ItemStateEvent,ItemStateChangedEvent,GroupItemStateChangedEvent,ItemStateUpdatedEvent,GroupStateUpdatedEvent,ItemStatePredictedEvent,GroupStateChangedEvent,GroupItemStateUpdatedEvent</typesAsInterfaces>
+              <graphqlSchemas>
+                <includePattern>.*\.graphqls</includePattern>
+              </graphqlSchemas>
+              <outputDir>${project.build.directory}/generated-sources</outputDir>
+              <apiPackageName>org.openhab.io.graphql.api</apiPackageName>
+              <modelPackageName>org.openhab.io.graphql.model</modelPackageName>
+              <packageName>org.openhab.io.graphql.model</packageName>
+              <customTypesMapping>
+                <DateTime>java.util.Date</DateTime>
+                <Price.amount>java.math.BigDecimal</Price.amount>
+              </customTypesMapping>
+              <customAnnotationsMapping>
+                <EpochMillis>
+                  <annotation>com.fasterxml.jackson.databind.annotation.JsonDeserialize(using =
+                    com.example.json.EpochMillisScalarDeserializer.class)</annotation>
+                </EpochMillis>
+              </customAnnotationsMapping>
+              <modelNamePrefix>Graphql</modelNamePrefix>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+        <execution>
+        <phase>generate-sources</phase>
+        <goals>
+        <goal>add-source</goal>
+        </goals>
+        <configuration>
+        <sources>
+        <source>${project.build.directory}/generated-sources/graphql</source>
+        </sources>
+        </configuration>
+        </execution>
+        </executions>
+        </plugin> -->
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.graphql-java</groupId>
+      <artifactId>graphql-java</artifactId>
+      <version>21.0</version>
+      <scope>compile</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- but this is transitive?? -->
+    <dependency>
+      <groupId>com.graphql-java</groupId>
+      <artifactId>java-dataloader</artifactId>
+      <version>3.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.reactivestreams</groupId>
+      <artifactId>reactive-streams</artifactId>
+      <version>1.0.3</version>
+    </dependency>
+    <dependency>
+      <artifactId>rxjava</artifactId>
+      <groupId>io.reactivex.rxjava2</groupId>
+      <version>2.2.17</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty.websocket</groupId>
+      <artifactId>websocket-server</artifactId>
+      <version>9.4.46.v20220331</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-library</artifactId>
+      <version>2.12.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.graphql-java</groupId>
+      <artifactId>graphql-java-extended-scalars</artifactId>
+      <version>20.2</version>
+    </dependency>
+
+  </dependencies>
+</project>

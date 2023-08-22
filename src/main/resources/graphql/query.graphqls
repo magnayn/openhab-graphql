@@ -1,0 +1,14 @@
+type Query {
+    item(id: ID!): Item
+    items(itemFilter: ItemFilterInput): [Item!]!
+
+    thing(id: ID!): Thing
+    things: [ThingInterface!]!
+
+}
+
+input ItemFilterInput {
+    type: String
+    tags: [String!]
+}
+

@@ -1,0 +1,219 @@
+""" --------------------------------------------------------------------------------------------------
+Things
+
+Things are the entities that can physically be added to a system and which can potentially provide
+many functionalities in one. It is important to note that Things do not have to be devices, but they can also represent a web service or any other manageable source of information and functionality. From a user perspective, they are relevant for the setup and configuration process, but not for the operation.
+
+Things can have configuration properties, which can be optional or mandatory. Such properties can be
+basic information like an IP address, an access token for a web service or a device specific configuration that alters its behavior.
+
+-------------------------------------------------------------------------------------------------- """
+
+interface ThingInterface {
+    uid: ID!
+    type: ThingType
+    label: String
+
+    """
+    Configuration for this thing, dependent on its' type
+    """
+    configuration: ThingConfiguration!
+    properties: JSON!
+
+    """
+    Description of location -- e.g 'Ground Floor'
+    """
+    location: String
+    channels: [Channel!]!
+
+    status: ThingStatusInfo!
+
+    firmware: ThingFirmware!
+    enabled: Boolean!
+
+    editable: Boolean!
+}
+
+type ThingConfiguration {
+    config: JSON
+    status: [ThingConfigStatusMessage!]!
+}
+
+enum StatusMessageEnum {
+    INFORMATION, WARNING, ERROR, PENDING
+}
+
+type ThingConfigStatusMessage {
+    parameterName: String!
+    type: StatusMessageEnum!
+    message: String!
+    statusCode: Int!
+}
+
+type ThingFirmware {
+    status: FirmwareStatus
+    firmwares: [Firmware!]!
+}
+
+enum FirmwareStatusEnum {
+    UNINITIALIZED, INITIALIZING, UNKNOWN, ONLINE, OFFLINE, REMOVING, REMOVED
+}
+
+enum FirmwareStatusDetailEnum {
+    NONE, NOT_YET_READY, HANDLER_MISSING_ERROR, HANDLER_REGISTERING_ERROR, HANDLER_INITIALIZING_ERROR, HANDLER_CONFIGURATION_PENDING, CONFIGURATION_PENDING, COMMUNICATION_ERROR, CONFIGURATION_ERROR, BRIDGE_OFFLINE, FIRMWARE_UPDATING, DUTY_CYCLE, BRIDGE_UNINITIALIZED, GONE, DISABLED
+}
+
+type Firmware {
+    vendor:	String
+    model:	String
+    modelRestricted:	Boolean!
+    description:	String
+    version:	String
+    changelog:	String
+    prerequisiteVersion:	String
+}
+
+type Thing implements ThingInterface {
+
+    # items from interface
+    uid: ID!
+    type: ThingType
+
+    label: String
+
+    ## These look like "ANY"
+    configuration: ThingConfiguration!
+    properties: JSON!
+
+
+    location: String
+    channels: [Channel!]!
+
+    status: ThingStatusInfo!
+
+    firmware: ThingFirmware!
+
+    enabled: Boolean!
+    editable: Boolean!
+
+    # Items from our type.
+    bridge: Bridge
+
+
+}
+
+
+
+
+type Bridge implements ThingInterface {
+    uid: ID!
+    type: ThingType
+
+    label: String
+
+    ## These look like "ANY"
+    configuration: ThingConfiguration!
+    properties: JSON!
+
+    #thingTypeUID: String
+
+    location: String
+    channels: [Channel!]!
+
+    status: ThingStatusInfo!
+
+    firmware: ThingFirmware!
+    enabled: Boolean!
+    editable: Boolean!
+    things: [Thing!]!
+
+}
+# By binding ?
+
+
+
+
+
+
+type FilterCriteria {
+    value: String
+    name: String
+}
+type ParameterOption {
+    label: String
+    value: String
+}
+
+enum ThingStatus {
+    UNINITIALIZED, INITIALIZING, UNKNOWN, ONLINE, OFFLINE, REMOVING, REMOVED
+}
+
+enum ThingStatusDetail {
+    NONE, NOT_YET_READY, HANDLER_MISSING_ERROR, HANDLER_REGISTERING_ERROR, HANDLER_INITIALIZING_ERROR, HANDLER_CONFIGURATION_PENDING, CONFIGURATION_PENDING, COMMUNICATION_ERROR, CONFIGURATION_ERROR, BRIDGE_OFFLINE, FIRMWARE_UPDATING, DUTY_CYCLE, BRIDGE_UNINITIALIZED, GONE, DISABLED
+}
+
+type ThingStatusInfo {
+    status: ThingStatus!
+    statusDetail: ThingStatusDetail!
+    description: String
+}
+
+enum FirmwareCurrentStatusEnum {
+    UNKNOWN,
+
+    """
+    The firmware of the thing is up to date.
+    """
+    UP_TO_DATE,
+
+    """
+    There is a newer firmware of the thing available. However the thing is not in a state where its firmware can be
+    updated
+    """
+    UPDATE_AVAILABLE,
+
+    """There is a newer firmware of the thing available and the firmware update for the thing can be executed."""
+    UPDATE_EXECUTABLE
+}
+
+type FirmwareStatus {
+    status: FirmwareCurrentStatusEnum!
+    updateableVersion: String!
+}
+
+
+
+type Channel {
+    """
+    Global ID of the channel
+    """
+    uid: ID!
+
+    """
+    ID of the channel relative to the thing, e.g: 'voltage', 'messages'
+    """
+    id: String
+
+    channelType: ChannelType
+
+    """
+    type of the item - e.g Number:Energy, String, DateTime
+    """
+    # TODO: ? typed
+    itemType: String
+
+    kind: ChannelKind
+    label: String
+    description: String
+
+    thing: ThingInterface!
+
+    # JSON
+    properties: JSON
+    configuration: JSON
+
+    autoUpdatePolicy: String
+
+    linkedItems: [Item!]!
+}
+

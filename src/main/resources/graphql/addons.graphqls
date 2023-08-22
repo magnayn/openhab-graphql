@@ -1,0 +1,44 @@
+
+
+
+
+"""-------------------------------------------------------
+Addons
+"""
+type Addon {
+    uid: ID!
+    id: String
+    label: String
+    version: String
+    maturity: String
+    compatible: Boolean
+    contentType: String
+    link: String
+    author: String
+    verifiedAuthor: String
+    installed: Boolean
+    type: String
+    description: String
+    detailedDescription: String
+    configDescriptionURI: String
+    keywords: String
+    countries: [String!]!
+    license: String
+    connection: String
+    backgroundColor: String
+    imageLink: String
+    properties: JSON
+    loggerPackages: [String!]!
+
+    # Maybe if only installed?
+    config: String
+
+    types: [AddonType!]!
+    services: [AddonType!]!
+}
+
+type AddonType {
+    id: String!
+    label: String
+}
+
