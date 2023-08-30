@@ -24,7 +24,7 @@ interface Item {
     label: String!
     category: String!
     tags: [String!]!
-    groupNames: [String!]!
+
 
     commandDescription: CommandDescription
 
@@ -73,7 +73,7 @@ type GenericItem implements Item {
     label: String!
     category: String!
     tags: [String!]!
-    groupNames: [String!]!
+
     commandDescription: CommandDescription
     metadata: ItemMetadata
     editable: Boolean
@@ -91,7 +91,7 @@ type GroupItem implements Item {
     label: String!
     category: String!
     tags: [String!]!
-    groupNames: [String!]!
+
     commandDescription: CommandDescription
     metadata: ItemMetadata
     editable: Boolean

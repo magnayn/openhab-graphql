@@ -10,6 +10,7 @@ import org.openhab.io.graphql.datafetcher.ThingsDataFetcher;
 import org.openhab.io.graphql.datafetcher.mutation.ItemCommandMutationResolver;
 import org.openhab.io.graphql.datafetcher.mutation.ItemMutationResolver;
 import org.openhab.io.graphql.datafetcher.subscription.SubscriptionDataFetcher;
+import org.openhab.io.graphql.datafetcher.subscription.SubscriptionGroupDataFetcher;
 import org.openhab.io.graphql.datafetcher.subscription.SubscriptionItemDataFetcher;
 import org.openhab.io.graphql.datafetcher.subscription.SubscriptionItemsDataFetcher;
 
@@ -29,7 +30,8 @@ public class TestGQLSystem {
         ItemMutationResolver itemMutationResolver = new ItemMutationResolver();
 
         ItemCommandMutationResolver itemCommandResolver = new ItemCommandMutationResolver(null, null);
+        SubscriptionGroupDataFetcher subscriptionGroupDataFetcher = new SubscriptionGroupDataFetcher(null, null);
         GQLSystem system = new GQLSystem(idf, tdf, itemDataFetcher, thingDataFetcher, null, sdf,
-                subscriptionItemDataFetcher, subscriptionItemsDataFetcher, itemMutationResolver, itemCommandResolver);
+                subscriptionGroupDataFetcher, subscriptionItemDataFetcher, subscriptionItemsDataFetcher, itemMutationResolver, itemCommandResolver);
     }
 }

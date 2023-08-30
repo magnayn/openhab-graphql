@@ -3,4 +3,9 @@ type Subscription {
 
     item(id:ID!) : ItemEvent!
     items(filter:ItemFilterInput): ItemEvent!
+
+    """
+    Subscribe to events from all members of a group
+    """
+    group(id:ID!) : ItemEvent!
 }

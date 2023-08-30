@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemRegistry;
 import org.openhab.io.graphql.mapping.Mapper;
@@ -33,7 +34,8 @@ public class ItemsDataFetcher implements DataFetcher<List<GraphqlItem>> {
     @Override
     public List<GraphqlItem> get(DataFetchingEnvironment environment) throws Exception {
 
-        var root = environment.getRoot();
+        var root = environment.getField();
+        var isGroup = root.getName().equals("groups");
 
         var arguments = environment.getArguments();
 
@@ -46,27 +48,14 @@ public class ItemsDataFetcher implements DataFetcher<List<GraphqlItem>> {
 
         var mappingSession = mapper.newMappingSession(environment);
 
-        return items.stream().map(it -> ItemWrapper.create(mappingSession, it)).collect(Collectors.toList());
+        return items.stream()
+                .filter(it -> !isGroup || it instanceof GroupItem)
+                .map(it -> ItemWrapper.create(mappingSession, it)).collect(Collectors.toList());
     }
 
     private Collection<Item> getItems(Map<String, Object> arguments) {
 
         var items = itemRegistry.getItems();
-
-        /*
-         * if( arguments.containsKey("type") )
-         * items = items.stream().filter( it -> it.getType().equals(arguments.get("type").toString() )).toList();
-         * 
-         * if( arguments.containsKey("tags") ) {
-         * var tags = (Collection<String>)arguments.get("tags");
-         * items = items.stream().filter(it -> itemHasTags(it,tags )).toList();
-         * }
-         * 
-         * if( arguments.containsKey("ids") ) {
-         * var ids = new HashSet((Collection<String>)arguments.get("ids"));
-         * items = items.stream().filter(it -> ids.contains( it.getName() ) ).toList();
-         * }
-         */
 
         return items.stream().filter(it -> filter(it, arguments)).toList();
     }

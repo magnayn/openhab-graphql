@@ -1,17 +1,22 @@
 package org.openhab.io.graphql.mapping.wrapper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
+import org.openhab.core.items.ItemNotFoundException;
 import org.openhab.io.graphql.mapping.MappingSession;
 import org.openhab.io.graphql.model.GraphqlChannel;
 import org.openhab.io.graphql.model.GraphqlCommandDescription;
+import org.openhab.io.graphql.model.GraphqlGenericItem;
+import org.openhab.io.graphql.model.GraphqlGroupItem;
 import org.openhab.io.graphql.model.GraphqlItem;
 import org.openhab.io.graphql.model.GraphqlItemMetadata;
 import org.openhab.io.graphql.model.GraphqlState;
 
-public class ItemWrapper implements GraphqlItem, IClassName {
+public class ItemWrapper implements GraphqlItem, GraphqlGenericItem, GraphqlGroupItem, IClassName {
     protected final Item item;
     protected final MappingSession session;
 
@@ -25,6 +30,10 @@ public class ItemWrapper implements GraphqlItem, IClassName {
     }
 
     public String get__typename() {
+
+        if (item instanceof GroupItem)
+            return "GroupItem";
+
         return "GenericItem";
     }
 
@@ -59,11 +68,6 @@ public class ItemWrapper implements GraphqlItem, IClassName {
     }
 
     @Override
-    public List<String> getGroupNames() {
-        return item.getGroupNames();
-    }
-
-    @Override
     public GraphqlCommandDescription getCommandDescription() {
         return null;
     }
@@ -92,6 +96,37 @@ public class ItemWrapper implements GraphqlItem, IClassName {
     public List<GraphqlChannel> getChannels() {
         var channels = session.getMapper().getChannelsForItem(item.getUID());
 
-        return channels.stream().map(it -> new ChannelWrapper(session, it)).collect(Collectors.toList());
+        return channels.stream()
+                .filter(Objects::nonNull)
+                .map(it -> new ChannelWrapper(session, it))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public GraphqlItem getBaseItem() {
+        var baseItem = ((GroupItem) item).getBaseItem();
+        return session.map(baseItem);
+    }
+
+    @Override
+    public List<GraphqlItem> getMembers() {
+        var members = ((GroupItem) item).getMembers();
+        return members.stream().map(
+                it -> session.map(it)
+        ).toList();
+    }
+
+    @Override
+    public List<GraphqlGroupItem> getGroups() {
+        return item.getGroupNames().stream().map(
+                        it -> {
+                            try {
+                                return session.getMapper().getItemMapper().getItemByName(it);
+                            } catch (ItemNotFoundException e) {
+                                return null;
+                            }
+                        }
+                ).filter(Objects::nonNull)
+                .map(it -> (GraphqlGroupItem) session.map(it)).toList();
     }
 }

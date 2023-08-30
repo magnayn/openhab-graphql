@@ -1,5 +1,6 @@
 package org.openhab.io.graphql.datafetcher;
 
+import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.ItemRegistry;
 import org.openhab.io.graphql.mapping.Mapper;
 import org.openhab.io.graphql.mapping.wrapper.ItemWrapper;
@@ -25,11 +26,14 @@ public class ItemDataFetcher implements DataFetcher<GraphqlItem> {
 
     @Override
     public GraphqlItem get(DataFetchingEnvironment environment) throws Exception {
-        var root = environment.getRoot();
+        var root = environment.getField();
 
         var arguments = environment.getArguments();
 
         var item = itemRegistry.getItem(arguments.get("id").toString());
+
+        if( root.getName().equals("group") && !(item instanceof GroupItem))
+            throw new IllegalArgumentException("Not a group");
 
         var mappingSession = mapper.newMappingSession(environment);
 

@@ -13,6 +13,7 @@ import org.openhab.io.graphql.datafetcher.ThingsDataFetcher;
 import org.openhab.io.graphql.datafetcher.mutation.ItemCommandMutationResolver;
 import org.openhab.io.graphql.datafetcher.mutation.ItemMutationResolver;
 import org.openhab.io.graphql.datafetcher.subscription.SubscriptionDataFetcher;
+import org.openhab.io.graphql.datafetcher.subscription.SubscriptionGroupDataFetcher;
 import org.openhab.io.graphql.datafetcher.subscription.SubscriptionItemDataFetcher;
 import org.openhab.io.graphql.datafetcher.subscription.SubscriptionItemsDataFetcher;
 import org.openhab.io.graphql.mapping.DynamicNameTypeResolver;
@@ -43,6 +44,7 @@ public class GQLSystem {
 
     private final SubscriptionDataFetcher subscriptionDataFetcher;
 
+    private final SubscriptionGroupDataFetcher subscriptionGroupDataFetcher;
     private GraphQL graphql;
     private final SubscriptionItemDataFetcher subscriptionItemDataFetcher;
     private final SubscriptionItemsDataFetcher subscriptionItemsDataFetcher;
@@ -51,17 +53,18 @@ public class GQLSystem {
 
     @Activate
     public GQLSystem(@Reference ItemsDataFetcher idf, @Reference ThingsDataFetcher thingsDataFetcher,
-            @Reference ItemDataFetcher itemDataFetcher, @Reference ThingDataFetcher thingDataFetcher,
-            @Reference EventPublisher eventPublisher, @Reference SubscriptionDataFetcher subscriptionDataFetcher,
-            @Reference SubscriptionItemDataFetcher subscriptionItemDataFetcher,
-            @Reference SubscriptionItemsDataFetcher subscriptionItemsDataFetcher,
-            @Reference ItemMutationResolver itemMutationResolver,
-            @Reference ItemCommandMutationResolver itemCommandResolver) throws IOException {
+                     @Reference ItemDataFetcher itemDataFetcher, @Reference ThingDataFetcher thingDataFetcher,
+                     @Reference EventPublisher eventPublisher, @Reference SubscriptionDataFetcher subscriptionDataFetcher,
+                     @Reference SubscriptionGroupDataFetcher subscriptionGroupDataFetcher, @Reference SubscriptionItemDataFetcher subscriptionItemDataFetcher,
+                     @Reference SubscriptionItemsDataFetcher subscriptionItemsDataFetcher,
+                     @Reference ItemMutationResolver itemMutationResolver,
+                     @Reference ItemCommandMutationResolver itemCommandResolver) throws IOException {
         this.itemsDataFetcher = idf;
         this.thingsDataFetcher = thingsDataFetcher;
         this.itemDataFetcher = itemDataFetcher;
         this.thingDataFetcher = thingDataFetcher;
         this.subscriptionDataFetcher = subscriptionDataFetcher;
+        this.subscriptionGroupDataFetcher = subscriptionGroupDataFetcher;
         this.subscriptionItemDataFetcher = subscriptionItemDataFetcher;
         this.subscriptionItemsDataFetcher = subscriptionItemsDataFetcher;
         this.itemMutationResolver = itemMutationResolver;
@@ -77,6 +80,8 @@ public class GQLSystem {
         var wiringBuilder = TypeRuntimeWiring.newTypeWiring("Query");
         wiringBuilder.dataFetcher("item", itemDataFetcher);
         wiringBuilder.dataFetcher("items", itemsDataFetcher);
+        wiringBuilder.dataFetcher("group", itemDataFetcher);
+        wiringBuilder.dataFetcher("groups", itemsDataFetcher);
         wiringBuilder.dataFetcher("thing", thingDataFetcher);
         wiringBuilder.dataFetcher("things", thingsDataFetcher);
 
@@ -98,6 +103,7 @@ public class GQLSystem {
         subscriptionWiring.dataFetcher("events", subscriptionDataFetcher);
         subscriptionWiring.dataFetcher("item", subscriptionItemDataFetcher);
         subscriptionWiring.dataFetcher("items", subscriptionItemsDataFetcher);
+        subscriptionWiring.dataFetcher("group", subscriptionGroupDataFetcher);
         runtimeWiringBuilder.type(subscriptionWiring.build());
 
         var mutationWiring = TypeRuntimeWiring.newTypeWiring("Mutation");

@@ -27,12 +27,6 @@ public class ChannelWrapper extends Wrapper<Channel> implements GraphqlChannel, 
     }
 
     @Override
-    public String getId() {
-        // TODO
-        return item.getDescription();
-    }
-
-    @Override
     public GraphqlChannelType getChannelType() {
         return null;
     }

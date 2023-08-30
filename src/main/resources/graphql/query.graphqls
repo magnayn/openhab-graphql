@@ -2,6 +2,9 @@ type Query {
     item(id: ID!): Item
     items(itemFilter: ItemFilterInput): [Item!]!
 
+    group(id: ID!): GroupItem
+    groups(itemFilter: ItemFilterInput): [GroupItem!]!
+
     thing(id: ID!): Thing
     things(thingFilter: ThingFilterInput): [ThingInterface!]!
 

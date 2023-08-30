@@ -189,11 +189,6 @@ type Channel {
     """
     uid: ID!
 
-    """
-    ID of the channel relative to the thing, e.g: 'voltage', 'messages'
-    """
-    id: String
-
     channelType: ChannelType
 
     """

@@ -9,6 +9,8 @@ public abstract class Wrapper<T> {
     protected final T item;
 
     protected Wrapper(MappingSession session, T item) {
+        if( item == null )
+            throw new IllegalArgumentException("Wrapped element cannot be null");
         this.session = session;
         this.item = item;
     }

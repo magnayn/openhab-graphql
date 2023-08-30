@@ -33,7 +33,7 @@
               <!-- all config options:
                 https://github.com/kobylynskyi/graphql-java-codegen/blob/main/docs/codegen-options.md
               -->
-              <typesAsInterfaces>Channel,Thing,Bridge,ThingType,ChannelType,ChannelDefinition,ChannelGroupDefinition,ConfigDescription,ConfigDescriptionParameter,ConfigDescriptionParameterGroup,ItemCommandEvent,ItemStateEvent,ItemStateChangedEvent,GroupItemStateChangedEvent,ItemStateUpdatedEvent,GroupStateUpdatedEvent,ItemStatePredictedEvent,GroupStateChangedEvent,GroupItemStateUpdatedEvent</typesAsInterfaces>
+              <typesAsInterfaces>Channel,Thing,Bridge,ThingType,ChannelType,ChannelDefinition,ChannelGroupDefinition,ConfigDescription,ConfigDescriptionParameter,ConfigDescriptionParameterGroup,ItemCommandEvent,ItemStateEvent,ItemStateChangedEvent,GroupItemStateChangedEvent,ItemStateUpdatedEvent,GroupStateUpdatedEvent,ItemStatePredictedEvent,GroupStateChangedEvent,GroupItemStateUpdatedEvent,GenericItem,GroupItem</typesAsInterfaces>
               <graphqlSchemas>
                 <includePattern>.*\.graphqls</includePattern>
               </graphqlSchemas>
