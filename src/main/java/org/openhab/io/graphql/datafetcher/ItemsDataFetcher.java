@@ -1,8 +1,12 @@
 package org.openhab.io.graphql.datafetcher;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemRegistry;
 import org.openhab.io.graphql.mapping.Mapper;
 import org.openhab.io.graphql.mapping.wrapper.ItemWrapper;
@@ -15,7 +19,6 @@ import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
 @Component(service = ItemsDataFetcher.class)
-// @QueryMapping(fieldName = "items")
 public class ItemsDataFetcher implements DataFetcher<List<GraphqlItem>> {
 
     private final Mapper mapper;
@@ -29,12 +32,69 @@ public class ItemsDataFetcher implements DataFetcher<List<GraphqlItem>> {
 
     @Override
     public List<GraphqlItem> get(DataFetchingEnvironment environment) throws Exception {
-        var items = itemRegistry.getItems();
+
+        var root = environment.getRoot();
+
+        var arguments = environment.getArguments();
+
+
+        var filter = (Map) arguments.get("itemFilter");
+        if (filter == null)
+            filter = new HashMap<>();
+
+        Collection<Item> items = getItems(filter);
 
         var mappingSession = mapper.newMappingSession(environment);
 
-        return items.stream().map(it -> {
-            return ItemWrapper.create(mappingSession, it);
-        }).collect(Collectors.toList());
+        return items.stream().map(it -> ItemWrapper.create(mappingSession, it)).collect(Collectors.toList());
+    }
+
+    private Collection<Item> getItems(Map<String, Object> arguments) {
+
+        var items = itemRegistry.getItems();
+
+        /*
+         * if( arguments.containsKey("type") )
+         * items = items.stream().filter( it -> it.getType().equals(arguments.get("type").toString() )).toList();
+         * 
+         * if( arguments.containsKey("tags") ) {
+         * var tags = (Collection<String>)arguments.get("tags");
+         * items = items.stream().filter(it -> itemHasTags(it,tags )).toList();
+         * }
+         * 
+         * if( arguments.containsKey("ids") ) {
+         * var ids = new HashSet((Collection<String>)arguments.get("ids"));
+         * items = items.stream().filter(it -> ids.contains( it.getName() ) ).toList();
+         * }
+         */
+
+        return items.stream().filter(it -> filter(it, arguments)).toList();
+    }
+
+    public static boolean filter(Item item, Map arguments) {
+        if (arguments.containsKey("type") && !item.getType().equals(arguments.get("type").toString()))
+            return false;
+
+        if (arguments.containsKey("tags")) {
+            var tags = (Collection<String>) arguments.get("tags");
+            if (!itemHasTags(item, tags))
+                return false;
+        }
+
+        if (arguments.containsKey("ids")) {
+            var ids = (Collection<String>) arguments.get("ids");
+            return ids.contains(item.getName());
+        }
+
+        return true;
+    }
+
+    private static boolean itemHasTags(Item item, Collection<String> tags) {
+        for (String tag : tags) {
+            if (!item.hasTag(tag)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

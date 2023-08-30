@@ -1,7 +1,6 @@
 package org.openhab.io.graphql.mapping.wrapper.type;
 
 import java.util.List;
-import java.util.Locale;
 
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.type.BridgeType;

@@ -15,7 +15,6 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.openhab.io.graphql.GQLSystem;
-import org.openhab.io.graphql.publisher.EventPublisher;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
@@ -67,9 +66,10 @@ public class GQLWebSocket {
         var v = session.getUpgradeRequest().getProtocolVersion();
         // session.getUpgradeResponse().setAcceptedSubProtocol(v);
 
-   /*     session.getUpgradeResponse().addHeader("Sec-WebSocket-Version", v);
-        session.getUpgradeResponse().addHeader("Sec-WebSocket-Protocol", "graphql-transport-ws");
-*/
+        /*
+         * session.getUpgradeResponse().addHeader("Sec-WebSocket-Version", v);
+         * session.getUpgradeResponse().addHeader("Sec-WebSocket-Protocol", "graphql-transport-ws");
+         */
         this.session = session;
     }
 

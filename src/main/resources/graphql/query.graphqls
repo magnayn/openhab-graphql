@@ -3,12 +3,18 @@ type Query {
     items(itemFilter: ItemFilterInput): [Item!]!
 
     thing(id: ID!): Thing
-    things: [ThingInterface!]!
+    things(thingFilter: ThingFilterInput): [ThingInterface!]!
 
 }
 
 input ItemFilterInput {
     type: String
     tags: [String!]
+    ids: [ID!]
+}
+
+input ThingFilterInput {
+    ids: [ID!]
+    typeId: ID
 }
 

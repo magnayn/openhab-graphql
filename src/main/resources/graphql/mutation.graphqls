@@ -1,0 +1,19 @@
+type Mutation {
+    item(id:ID!): ItemMutations!
+}
+
+type ItemMutations {
+    executeCommand(command: String!): ExecuteCommandResult
+}
+
+union ExecuteCommandResult =
+    ExecuteCommandResultSuccess
+    | ExecuteCommandResultFailure
+
+type ExecuteCommandResultSuccess {
+    item: Item
+}
+
+type ExecuteCommandResultFailure {
+    error: String
+}

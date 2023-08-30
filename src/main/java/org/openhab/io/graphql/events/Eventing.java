@@ -1,5 +1,7 @@
 package org.openhab.io.graphql.events;
 
+import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventSubscriber;
@@ -9,8 +11,6 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Set;
 
 @Component
 @NonNullByDefault

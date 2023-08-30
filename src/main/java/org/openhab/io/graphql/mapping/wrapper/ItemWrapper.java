@@ -85,7 +85,7 @@ public class ItemWrapper implements GraphqlItem, IClassName {
 
     @Override
     public GraphqlState getState() {
-        return session.map(item.getState());
+        return session.map(item, item.getState());
     }
 
     @Override

@@ -1,5 +1,12 @@
 package org.openhab.io.graphql.mapping;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.automation.annotation.RuleAction;
 import org.openhab.core.automation.handler.ModuleHandlerFactory;
@@ -18,21 +25,16 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 @Component(service = ThingMapper.class)
 public class ThingMapper {
     private final ManagedThingProvider managedThingProvider;
     private final ModuleTypeRegistry moduleTypeRegistry;
     Map<ThingUID, Map<String, ThingActions>> thingActionsMap = new ConcurrentHashMap<>();
     private List<ModuleHandlerFactory> moduleHandlerFactories = new ArrayList<>();
+
     @Activate
-    public ThingMapper(@Reference ManagedThingProvider managedThingProvider, @Reference ModuleTypeRegistry moduleTypeRegistry) {
+    public ThingMapper(@Reference ManagedThingProvider managedThingProvider,
+            @Reference ModuleTypeRegistry moduleTypeRegistry) {
         this.managedThingProvider = managedThingProvider;
         this.moduleTypeRegistry = moduleTypeRegistry;
     }

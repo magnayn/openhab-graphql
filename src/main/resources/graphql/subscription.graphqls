@@ -1,10 +1,6 @@
 type Subscription {
     events : Event!
 
-    item(id:ID!) : Event!
-    items(filter:ItemFilter): Event!
-}
-
-input ItemFilter {
-    ids: [ID!]
+    item(id:ID!) : ItemEvent!
+    items(filter:ItemFilterInput): ItemEvent!
 }

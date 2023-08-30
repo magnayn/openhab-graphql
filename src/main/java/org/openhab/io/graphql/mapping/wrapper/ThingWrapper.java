@@ -116,6 +116,6 @@ public class ThingWrapper implements GraphqlThing, GraphqlBridge, IClassName {
     @Override
     public List<GraphqlThing> getThings() {
 
-        return ((Bridge)thing).getThings().stream().map( it->session.map(it) ).toList();
+        return ((Bridge) thing).getThings().stream().map(it -> session.map(it)).toList();
     }
 }

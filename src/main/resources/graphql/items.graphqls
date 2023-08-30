@@ -62,8 +62,8 @@ type Metadata implements ItemMetadata {
 }
 
 interface State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 }
 
 type GenericItem implements Item {
@@ -107,25 +107,31 @@ type GroupItem implements Item {
 States
 """
 type DateTimeState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
-    state: DateTime
+    dateTime: DateTime!
 }
 
 type StringState implements State
 {
-    transformedState: String
-    stateDescription: StateDescription
-
     state: String
+    description: StateDescription
+
+    string: String!
 }
 
-type CallItemState implements State {
-    transformedState: String
-    stateDescription: StateDescription
 
-    state: [String!]!
+enum UnDefEnum {
+UNDEF
+NULL
+}
+
+type UnDefState implements State {
+    state: String
+    description: StateDescription
+
+    undef: UnDefEnum!
 }
 
 enum PlayerItemStateEnum {
@@ -133,10 +139,10 @@ enum PlayerItemStateEnum {
 }
 
 type PlayerItemState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
-    state: PlayerItemStateEnum
+    playerState: PlayerItemStateEnum
 }
 
 enum ContactItemStateEnum {
@@ -144,15 +150,15 @@ enum ContactItemStateEnum {
 }
 
 type ContactItemState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
-    state: ContactItemStateEnum
+    contactState: ContactItemStateEnum
 }
 
-type ImageItemState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+type RawState implements State {
+    state: String
+    description: StateDescription
 
     mimeType: String
     bytes: Base64
@@ -164,28 +170,40 @@ enum OnOffEnum {
 
 
 type OnOffState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
-    value: OnOffEnum
+    onOffValue: OnOffEnum
 }
 
-type PercentState {
-    percent: Int
+type PercentState implements State {
+    state: String
+    description: StateDescription
+
+    percent: Float!
 }
 
 type DimmerState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
-    percent: Int
+    dimmerPercent: Int
 }
 
+enum OpenClosedEnum {
+    OPEN, CLOSED
+}
 
+type OpenClosedState implements State {
+    state: String
+    description: StateDescription
+
+    openClosed: OpenClosedEnum
+}
 
 type HSBState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
     hue: Float
     saturation: Float
@@ -198,36 +216,47 @@ enum UpDownEnum {
 }
 
 type UpDownState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
     position: UpDownEnum
 }
 
 
 type DecimalState  implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
-    number: Float
-    unitSymbol: String
+    number: Float!
 }
 
-type QuantityType implements State {
-    transformedState: String
-    stateDescription: StateDescription
+type QuantityState implements State {
+    state: String
+    description: StateDescription
 
     quantity: Float
     unitSymbol: String
 }
 
 type LocationState implements State {
-    transformedState: String
-    stateDescription: StateDescription
+    state: String
+    description: StateDescription
 
     lon: Float
     lat: Float
-    altitute: Float
+    altitude: Float
+}
+
+type StringListState implements State {
+    state: String
+    description: StateDescription
+
+    strings: [String!]!
+}
+
+type OtherState implements State {
+    state: String
+    description: StateDescription
 }
 
 type StateDescription {

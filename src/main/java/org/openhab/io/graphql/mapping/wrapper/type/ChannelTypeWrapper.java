@@ -2,7 +2,6 @@ package org.openhab.io.graphql.mapping.wrapper.type;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.io.graphql.mapping.MappingSession;

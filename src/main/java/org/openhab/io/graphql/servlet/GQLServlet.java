@@ -67,14 +67,14 @@ public class GQLServlet extends WebSocketServlet {
     protected void service(HttpServletRequest request, HttpServletResponse resp)
             throws ServletException, IOException, IllegalArgumentException {
 
-/*
-        return response.encoding(StandardCharsets.UTF_8.name()) //
-                .header(
-                .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                .header("Access-Control-Allow-Credentials", "true")
-                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                .header("Access-Control-Max-Age", "1209600");
-  */
+        /*
+         * return response.encoding(StandardCharsets.UTF_8.name()) //
+         * .header(
+         * .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+         * .header("Access-Control-Allow-Credentials", "true")
+         * .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+         * .header("Access-Control-Max-Age", "1209600");
+         */
 
         if ("websocket".equalsIgnoreCase(request.getHeader("Upgrade"))) {
             resp.addHeader("Sec-WebSocket-Protocol", "graphql-transport-ws");
@@ -86,7 +86,6 @@ public class GQLServlet extends WebSocketServlet {
         resp.addHeader("Access-Control-Allow-Origin", "*");
         resp.addHeader("Access-Control-Allow-Methods", "*");
         resp.addHeader("Access-Control-Allow-Headers", "*");
-
 
         if (request.getMethod().equalsIgnoreCase("GET")) {
             processPlaygrounds(resp);
@@ -107,7 +106,7 @@ public class GQLServlet extends WebSocketServlet {
         Gson gson = new GsonBuilder().create();
         Map data = gson.fromJson(body, Map.class);
 
-        if( data == null ) {
+        if (data == null) {
             logger.info("No data provided");
             logger.info(body);
             return;
@@ -121,7 +120,7 @@ public class GQLServlet extends WebSocketServlet {
             ex.variables((Map<String, Object>) data.get("variables"));
         }
 
-        if (data.containsKey("operationName") && data.get("operationName") != null)  {
+        if (data.containsKey("operationName") && data.get("operationName") != null) {
             ex.operationName(data.get("operationName").toString());
         }
 

@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.io.rest.LocaleService;
 import org.openhab.core.items.Item;
+import org.openhab.core.items.ItemNotFoundException;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -60,10 +61,10 @@ public class Mapper {
 
     @Activate
     public Mapper(@Reference ItemChannelLinkRegistry linkRegistry, @Reference ThingRegistry thingRegistry,
-                  @Reference LocaleService localeService,
-                  @Reference ThingMapper thingMapper, @Reference ItemMapper itemMapper, @Reference ThingTypeMapper thingTypeMapper,
-                  @Reference ConfigDefinitionMapper configDefinitionMapper, @Reference ProfileTypeMapper profileTypeMapper,
-                  @Reference FirmwareMapper firmwareMapper, @Reference ChannelMapper channelMapper) {
+            @Reference LocaleService localeService, @Reference ThingMapper thingMapper,
+            @Reference ItemMapper itemMapper, @Reference ThingTypeMapper thingTypeMapper,
+            @Reference ConfigDefinitionMapper configDefinitionMapper, @Reference ProfileTypeMapper profileTypeMapper,
+            @Reference FirmwareMapper firmwareMapper, @Reference ChannelMapper channelMapper) {
 
         this.thingRegistry = thingRegistry;
         this.linkRegistry = linkRegistry;
@@ -85,15 +86,9 @@ public class Mapper {
         return profileTypeMapper;
     }
 
-
-
     public ConfigDefinitionMapper getConfigDefinitionMapper() {
         return configDefinitionMapper;
     }
-
-
-
-
 
     public MappingSession newMappingSession(DataFetchingEnvironment dfe) {
         return new MappingSession(this, dfe);
@@ -118,10 +113,6 @@ public class Mapper {
         return thingRegistry.get(thingUID);
     }
 
-
-
-
-
     public GraphqlThingStatusInfo mapThingStatusInfo(ThingStatusInfo statusInfo) {
         return GraphqlThingStatusInfo.builder().setDescription(statusInfo.getDescription())
                 .setStatus(GraphqlThingStatus.valueOf(statusInfo.getStatus().toString()))
@@ -134,5 +125,17 @@ public class Mapper {
 
     public FirmwareMapper getFirmwareMapper() {
         return this.firmwareMapper;
+    }
+
+    public Item getItemForTopic(String topic) {
+        var name = topic.substring(14);
+        name = name.substring(0, name.indexOf('/'));
+
+        try {
+            var theItem = getItemMapper().getItemByName(name);
+            return theItem;
+        } catch (ItemNotFoundException e) {
+            return null;
+        }
     }
 }
