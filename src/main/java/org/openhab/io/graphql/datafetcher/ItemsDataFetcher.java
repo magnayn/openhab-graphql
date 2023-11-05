@@ -12,6 +12,7 @@ import org.openhab.core.items.ItemRegistry;
 import org.openhab.io.graphql.mapping.Mapper;
 import org.openhab.io.graphql.mapping.wrapper.ItemWrapper;
 import org.openhab.io.graphql.model.GraphqlItem;
+import org.openhab.io.graphql.model.GraphqlItemCollection;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -20,7 +21,7 @@ import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 
 @Component(service = ItemsDataFetcher.class)
-public class ItemsDataFetcher implements DataFetcher<List<GraphqlItem>> {
+public class ItemsDataFetcher implements DataFetcher<CollectionWrapper<GraphqlItem>> {
 
     private final Mapper mapper;
     protected ItemRegistry itemRegistry;
@@ -32,9 +33,10 @@ public class ItemsDataFetcher implements DataFetcher<List<GraphqlItem>> {
     }
 
     @Override
-    public List<GraphqlItem> get(DataFetchingEnvironment environment) throws Exception {
+    public CollectionWrapper<GraphqlItem> get(DataFetchingEnvironment environment) throws Exception {
 
         var root = environment.getField();
+        // This can be called as 'groups' or 'items'
         var isGroup = root.getName().equals("groups");
 
         var arguments = environment.getArguments();
@@ -48,9 +50,9 @@ public class ItemsDataFetcher implements DataFetcher<List<GraphqlItem>> {
 
         var mappingSession = mapper.newMappingSession(environment);
 
-        return items.stream()
+        return mappingSession.buildCollection(items.stream()
                 .filter(it -> !isGroup || it instanceof GroupItem)
-                .map(it -> ItemWrapper.create(mappingSession, it)).collect(Collectors.toList());
+                .map(it -> ItemWrapper.create(mappingSession, it) ));
     }
 
     private Collection<Item> getItems(Map<String, Object> arguments) {

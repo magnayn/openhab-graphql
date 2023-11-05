@@ -33,7 +33,6 @@ public class Eventing implements EventSubscriber {
 
     @Override
     public void receive(Event event) {
-        logger.info("Event {}", event.getTopic());
         ssePublisher.broadcast(event);
     }
 }

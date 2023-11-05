@@ -56,7 +56,7 @@ public class GQLService implements EventHandler {
     public static final String REST_APP_NAME = "GraphQL";
 
     public GQLService() {
-        logger.info("GQLService()");
+
     }
 
     @PreMatching
@@ -64,7 +64,7 @@ public class GQLService implements EventHandler {
         @NonNullByDefault({})
         @Override
         public void filter(ContainerRequestContext requestContext) {
-            logger.info("GQLService::filter()");
+
             /**
              * Jetty returns 415 on any GET request if a client sends the Content-Type header.
              * This is a workaround - stripping it away in the preMatching stage.
@@ -80,14 +80,13 @@ public class GQLService implements EventHandler {
         @NonNullByDefault({})
         @Override
         public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
-            logger.info("GQLService::logFuilter()");
             /*
              * if (!logger.isDebugEnabled()) {
              * return;
              * }
              */
-            logger.info("REST request {} {}", requestContext.getMethod(), requestContext.getUriInfo().getPath());
-            logger.info("REST response: {}", responseContext.getEntity());
+            logger.debug("REST request {} {}", requestContext.getMethod(), requestContext.getUriInfo().getPath());
+            logger.debug("REST response: {}", responseContext.getEntity());
         }
     }
 

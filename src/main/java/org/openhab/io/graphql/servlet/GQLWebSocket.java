@@ -81,7 +81,7 @@ public class GQLWebSocket {
      */
     @OnWebSocketMessage
     public void onText(Session session, String query) throws IOException {
-        logger.info("Websocket said {}", query);
+        logger.debug("Websocket said {}", query);
 
         Gson gson = new GsonBuilder().create();
         Map json = gson.fromJson(query, Map.class);
@@ -124,7 +124,7 @@ public class GQLWebSocket {
 
                 @Override
                 public void onNext(ExecutionResult er) {
-                    logger.info("Sending stick price update");
+
                     try {
                         Gson gson = new GsonBuilder().create();
 
@@ -184,7 +184,7 @@ public class GQLWebSocket {
      */
     @OnWebSocketError
     public void onError(Throwable cause) {
-        logger.info("GQLWebSocket::onError()");
+        logger.error("GQLWebSocket::onError()");
         logger.error("error", cause);
     }
 }

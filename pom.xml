@@ -7,12 +7,12 @@
   <parent>
     <groupId>org.openhab.addons.bundles</groupId>
     <artifactId>org.openhab.addons.reactor.bundles</artifactId>
-    <version>4.1.0-SNAPSHOT</version>
+    <version>4.0.5-SNAPSHOT</version>
   </parent>
 
   <properties>
     <slf4j.version>1.7.32</slf4j.version>
-    <bnd.importpackage>org.checkerframework.*;resolution:=optional,javax.annotation.meta.*;resolution:=optional,com.google.errorprone.*;resolution:=optional,com.google.gson.*;resolution:=optional</bnd.importpackage>
+    <bnd.importpackage>org.checkerframework.*;resolution:=optional,javax.annotation.meta.*;resolution:=optional,com.google.errorprone.*;resolution:=optional,com.google.gson.*;resolution:=optional;com.fasterxml.jackson.*</bnd.importpackage>
   </properties>
 
   <artifactId>org.openhab.io.graphql</artifactId>

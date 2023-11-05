@@ -1,13 +1,12 @@
 type Query {
     item(id: ID!): Item
-    items(itemFilter: ItemFilterInput): [Item!]!
+    items(itemFilter: ItemFilterInput, skip:Int = 0, limit:Int = 100): ItemCollection
 
     group(id: ID!): GroupItem
-    groups(itemFilter: ItemFilterInput): [GroupItem!]!
+    groups(itemFilter: ItemFilterInput, skip:Int = 0, limit:Int = 100): GroupCollection
 
     thing(id: ID!): Thing
-    things(thingFilter: ThingFilterInput): [ThingInterface!]!
-
+    things(thingFilter: ThingFilterInput, skip:Int = 0, limit:Int = 100): ThingCollection
 }
 
 input ItemFilterInput {
@@ -21,3 +20,23 @@ input ThingFilterInput {
     typeId: ID
 }
 
+type ItemCollection {
+    total: Int!
+    skip: Int!
+    limit: Int!
+    items: [Item!]!
+}
+
+type GroupCollection {
+    total: Int!
+    skip: Int!
+    limit: Int!
+    items: [GroupItem!]!
+}
+
+type ThingCollection {
+    total: Int!
+    skip: Int!
+    limit: Int!
+    items: [ThingInterface!]!
+}

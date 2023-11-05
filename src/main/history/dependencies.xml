@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<features xmlns="http://karaf.apache.org/xmlns/features/v1.6.0" name="org.openhab.io.graphql-4.1.0-SNAPSHOT">
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.6.0" name="org.openhab.io.graphql-4.0.5-SNAPSHOT">
     <feature version="0.0.0">
         <feature>openhab-runtime-base</feature>
         <feature>wrap</feature>
@@ -19,7 +19,7 @@
         <bundle>mvn:org.eclipse.jetty/jetty-servlet/9.4.46.v20220331</bundle>
         <bundle>mvn:org.eclipse.jetty/jetty-util-ajax/9.4.46.v20220331</bundle>
         <bundle>mvn:org.eclipse.jetty/jetty-util/9.4.46.v20220331</bundle>
-        <bundle>mvn:org.openhab.addons.bundles/org.openhab.io.graphql/4.1.0-SNAPSHOT</bundle>
+        <bundle>mvn:org.openhab.addons.bundles/org.openhab.io.graphql/4.0.5-SNAPSHOT</bundle>
         <bundle>mvn:org.reactivestreams/reactive-streams/1.0.3</bundle>
         <bundle>mvn:org.scala-lang/scala-library/2.12.2</bundle>
         <bundle>mvn:org.slf4j/slf4j-api/1.7.30</bundle>

@@ -69,7 +69,6 @@ public class GQLSystem {
         this.subscriptionItemsDataFetcher = subscriptionItemsDataFetcher;
         this.itemMutationResolver = itemMutationResolver;
         this.itemCommandResolver = itemCommandResolver;
-        logger.info("GQLServer()");
         init();
     }
 

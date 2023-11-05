@@ -5,6 +5,9 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.openhab.core.items.Item;
 import org.openhab.core.library.types.DateTimeType;
@@ -28,7 +31,9 @@ import org.openhab.core.thing.firmware.FirmwareStatusInfo;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.CommandDescription;
 import org.openhab.core.types.State;
+import org.openhab.core.types.StateDescription;
 import org.openhab.core.types.UnDefType;
+import org.openhab.io.graphql.datafetcher.CollectionWrapper;
 import org.openhab.io.graphql.mapping.wrapper.ItemWrapper;
 import org.openhab.io.graphql.mapping.wrapper.ThingWrapper;
 import org.openhab.io.graphql.model.GraphqlCommandDescription;
@@ -147,11 +152,24 @@ public class MappingSession {
         return ItemWrapper.create(this, it);
     }
 
+    public GraphqlStateDescription map(StateDescription it) {
+        var result = GraphqlStateDescription.builder();
+
+        if( it.getMaximum() != null )
+                result.setMaximum(it.getMaximum().doubleValue())
+                      .setMinimum(it.getMinimum().doubleValue())
+                        .setStep(it.getStep().doubleValue())
+                        .setReadOnly(it.isReadOnly())
+                        .setPattern(it.getPattern());
+
+        return result.build();
+    }
+
     public GraphqlState map(Item item, State s) {
 
         var state = s.toFullString();
         // TODO:
-        var description = new GraphqlStateDescription();
+        var description = map(item.getStateDescription());
 
         if (s instanceof QuantityType) {
             return new GraphqlQuantityState(state, description, ((QuantityType<?>) s).doubleValue(), ((QuantityType<?>) s).getUnit().getName());
@@ -225,5 +243,14 @@ public class MappingSession {
 
     public String map(Command itemCommand) {
         return itemCommand.toString();
+    }
+
+    public <T> CollectionWrapper<T> buildCollection(Stream<T> stream) {
+        var args = dataFetchingEnvironment.getArguments();
+
+        var skip = (int)args.get("skip");
+        var limit = (int)args.get("limit");
+
+        return new CollectionWrapper<T>(stream, skip, limit);
     }
 }

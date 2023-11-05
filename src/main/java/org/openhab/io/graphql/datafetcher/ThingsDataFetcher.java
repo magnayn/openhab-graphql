@@ -20,7 +20,7 @@ import graphql.schema.DataFetchingEnvironment;
 
 @Component(service = ThingsDataFetcher.class)
 // @QueryMapping(fieldName = "items")
-public class ThingsDataFetcher implements DataFetcher<List<GraphqlThingInterface>> {
+public class ThingsDataFetcher implements DataFetcher<CollectionWrapper<GraphqlThingInterface>> {
 
     protected ThingRegistry thingsRegistry;
 
@@ -33,7 +33,7 @@ public class ThingsDataFetcher implements DataFetcher<List<GraphqlThingInterface
     }
 
     @Override
-    public List<GraphqlThingInterface> get(DataFetchingEnvironment environment) throws Exception {
+    public CollectionWrapper<GraphqlThingInterface> get(DataFetchingEnvironment environment) throws Exception {
         var items = thingsRegistry.getAll();
         var root = environment.getRoot();
 
@@ -51,6 +51,6 @@ public class ThingsDataFetcher implements DataFetcher<List<GraphqlThingInterface
         }
 
         var m = mapper.newMappingSession(environment);
-        return items.stream().map(it -> new ThingWrapper(m, it)).collect(Collectors.toList());
+        return m.buildCollection(items.stream().map(it -> new ThingWrapper(m, it)));
     }
 }

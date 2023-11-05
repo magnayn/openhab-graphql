@@ -51,13 +51,11 @@ public class GQLServlet extends WebSocketServlet {
     public GQLServlet(ComponentContext componentContext, @Reference GQLSystem system) {
         this.system = system;
         this.bundleContext = componentContext.getBundleContext();
-
-        logger.info("GQLServlet()");
     }
 
     @Deactivate
     protected void deactivate() {
-        logger.debug("GQLServlet: Stopping");
+
     }
 
     /**
@@ -97,9 +95,7 @@ public class GQLServlet extends WebSocketServlet {
             return;
         }
 
-        logger.info("Posted an request");
         var body = request.getReader().lines().collect(Collectors.joining());
-        logger.info(body);
 
         var graphql = system.getGraphQL();
         // .queryExecutionStrategy(AsyncExecutionStrategy(DebugDataFetcherExceptionHandler())).build()
@@ -107,8 +103,8 @@ public class GQLServlet extends WebSocketServlet {
         Map data = gson.fromJson(body, Map.class);
 
         if (data == null) {
-            logger.info("No data provided");
-            logger.info(body);
+            logger.warn("No data provided");
+            logger.warn(body);
             return;
         }
 
@@ -184,7 +180,6 @@ public class GQLServlet extends WebSocketServlet {
 
         public Shelly2WebSocketCreator(GQLSystem system) {
 
-            logger.info("Shelly2WebSocketCreator()");
             this.system = system;
         }
 
