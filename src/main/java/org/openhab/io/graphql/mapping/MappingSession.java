@@ -57,6 +57,7 @@ import org.openhab.io.graphql.model.GraphqlQuantityState;
 import org.openhab.io.graphql.model.GraphqlRawState;
 import org.openhab.io.graphql.model.GraphqlState;
 import org.openhab.io.graphql.model.GraphqlStateDescription;
+import org.openhab.io.graphql.model.GraphqlStateOption;
 import org.openhab.io.graphql.model.GraphqlStringListState;
 import org.openhab.io.graphql.model.GraphqlStringState;
 import org.openhab.io.graphql.model.GraphqlThing;
@@ -155,12 +156,25 @@ public class MappingSession {
     public GraphqlStateDescription map(StateDescription it) {
         var result = GraphqlStateDescription.builder();
 
-        if( it.getMaximum() != null )
-                result.setMaximum(it.getMaximum().doubleValue())
-                      .setMinimum(it.getMinimum().doubleValue())
-                        .setStep(it.getStep().doubleValue())
-                        .setReadOnly(it.isReadOnly())
-                        .setPattern(it.getPattern());
+
+        if (it.getMaximum() != null) {
+            result.setMaximum(it.getMaximum().doubleValue());
+        }
+        if (it.getMinimum() != null) {
+            result.setMinimum(it.getMinimum().doubleValue());
+        }
+        if (it.getStep() != null) {
+            result.setStep(it.getStep().doubleValue());
+        }
+
+        result.setReadOnly(it.isReadOnly())
+                .setPattern(it.getPattern());
+
+
+
+        result.setOptions( it.getOptions().stream().map(
+                 it2 -> new GraphqlStateOption(it2.getValue(), it2.getLabel())
+        ).toList() );
 
         return result.build();
     }
@@ -169,14 +183,18 @@ public class MappingSession {
 
         var state = s.toFullString();
         // TODO:
-        var description = map(item.getStateDescription());
+        GraphqlStateDescription description = null;
+
+        if( item.getStateDescription() != null) {
+            description = map(item.getStateDescription());
+        }
 
         if (s instanceof QuantityType) {
             return new GraphqlQuantityState(state, description, ((QuantityType<?>) s).doubleValue(), ((QuantityType<?>) s).getUnit().getName());
         }
 
         if (s instanceof OpenClosedType) {
-            return new GraphqlOpenClosedState(state, description, GraphqlOpenClosedEnum.valueOf(s.toString()) );
+            return new GraphqlOpenClosedState(state, description, GraphqlOpenClosedEnum.valueOf(s.toString()));
         }
 
         if (s instanceof StringType) {
@@ -196,7 +214,7 @@ public class MappingSession {
         }
 
         if (s instanceof DateTimeType) {
-            return new GraphqlDateTimeState(state, description, new Date(((DateTimeType) s).getInstant().toEpochMilli()) );
+            return new GraphqlDateTimeState(state, description, new Date(((DateTimeType) s).getInstant().toEpochMilli()));
         }
 
         if (s instanceof RewindFastforwardType) {
@@ -221,11 +239,11 @@ public class MappingSession {
 
         if (s instanceof StringListType) {
             List<String> values = new ArrayList<>();
-            int i=0;
-            while(true) {
+            int i = 0;
+            while (true) {
                 try {
-                    values.add( ((StringListType) s).getValue(i));
-                } catch( IllegalArgumentException ex) {
+                    values.add(((StringListType) s).getValue(i));
+                } catch (IllegalArgumentException ex) {
                     // expected
                     return new GraphqlStringListState(state, description, values);
                 }
@@ -248,8 +266,8 @@ public class MappingSession {
     public <T> CollectionWrapper<T> buildCollection(Stream<T> stream) {
         var args = dataFetchingEnvironment.getArguments();
 
-        var skip = (int)args.get("skip");
-        var limit = (int)args.get("limit");
+        var skip = (int) args.get("skip");
+        var limit = (int) args.get("limit");
 
         return new CollectionWrapper<T>(stream, skip, limit);
     }
