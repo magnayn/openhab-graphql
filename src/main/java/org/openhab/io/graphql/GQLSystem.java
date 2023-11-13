@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 
 import org.openhab.io.graphql.datafetcher.ItemDataFetcher;
 import org.openhab.io.graphql.datafetcher.ItemsDataFetcher;
+import org.openhab.io.graphql.datafetcher.TagsDataFetcher;
 import org.openhab.io.graphql.datafetcher.ThingDataFetcher;
 import org.openhab.io.graphql.datafetcher.ThingsDataFetcher;
 import org.openhab.io.graphql.datafetcher.mutation.ItemCommandMutationResolver;
@@ -38,6 +39,7 @@ public class GQLSystem {
     private final Logger logger = LoggerFactory.getLogger(GQLSystem.class);
     protected final ItemsDataFetcher itemsDataFetcher;
     private final ThingsDataFetcher thingsDataFetcher;
+    private final TagsDataFetcher tagsDataFetcher;
 
     protected final ItemDataFetcher itemDataFetcher;
     private final ThingDataFetcher thingDataFetcher;
@@ -54,6 +56,7 @@ public class GQLSystem {
     @Activate
     public GQLSystem(@Reference ItemsDataFetcher idf, @Reference ThingsDataFetcher thingsDataFetcher,
                      @Reference ItemDataFetcher itemDataFetcher, @Reference ThingDataFetcher thingDataFetcher,
+                     @Reference TagsDataFetcher tagsDataFetcher,
                      @Reference EventPublisher eventPublisher, @Reference SubscriptionDataFetcher subscriptionDataFetcher,
                      @Reference SubscriptionGroupDataFetcher subscriptionGroupDataFetcher, @Reference SubscriptionItemDataFetcher subscriptionItemDataFetcher,
                      @Reference SubscriptionItemsDataFetcher subscriptionItemsDataFetcher,
@@ -63,6 +66,7 @@ public class GQLSystem {
         this.thingsDataFetcher = thingsDataFetcher;
         this.itemDataFetcher = itemDataFetcher;
         this.thingDataFetcher = thingDataFetcher;
+        this.tagsDataFetcher = tagsDataFetcher;
         this.subscriptionDataFetcher = subscriptionDataFetcher;
         this.subscriptionGroupDataFetcher = subscriptionGroupDataFetcher;
         this.subscriptionItemDataFetcher = subscriptionItemDataFetcher;
@@ -83,6 +87,8 @@ public class GQLSystem {
         wiringBuilder.dataFetcher("groups", itemsDataFetcher);
         wiringBuilder.dataFetcher("thing", thingDataFetcher);
         wiringBuilder.dataFetcher("things", thingsDataFetcher);
+        wiringBuilder.dataFetcher("tags", tagsDataFetcher);
+
 
         runtimeWiringBuilder.type(wiringBuilder.build());
         runtimeWiringBuilder.type(DynamicNameTypeResolver.THING_INTERFACE);

@@ -21,8 +21,8 @@ interface Item {
     Type: e.g: Switch, Dimmer, Group. Think this is fixed.
     """
     type: String!
-    label: String!
-    category: String!
+    label: String
+    category: String
     tags: [String!]!
 
 
@@ -70,8 +70,8 @@ type GenericItem implements Item {
     uid: ID!
     name: String!
     type: String!
-    label: String!
-    category: String!
+    label: String
+    category: String
     tags: [String!]!
 
     commandDescription: CommandDescription

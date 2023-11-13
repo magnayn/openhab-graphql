@@ -34,6 +34,9 @@ public class LazyEventWrapper {
     }
 
     public Item getReferencedItem() {
+        if( event == null || event.getTopic() == null) {
+            return null;
+        }
         return mapper.getItemForTopic(event.getTopic());
     }
 }

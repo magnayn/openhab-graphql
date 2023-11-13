@@ -7,6 +7,13 @@ type Query {
 
     thing(id: ID!): Thing
     things(thingFilter: ThingFilterInput, skip:Int = 0, limit:Int = 100): ThingCollection
+
+    tags: [TagEntry!]!
+}
+
+type TagEntry {
+    name: String!
+    items: [Item!]!
 }
 
 input ItemFilterInput {

@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.openhab.io.graphql.datafetcher.ItemDataFetcher;
 import org.openhab.io.graphql.datafetcher.ItemsDataFetcher;
+import org.openhab.io.graphql.datafetcher.TagsDataFetcher;
 import org.openhab.io.graphql.datafetcher.ThingDataFetcher;
 import org.openhab.io.graphql.datafetcher.ThingsDataFetcher;
 import org.openhab.io.graphql.datafetcher.mutation.ItemCommandMutationResolver;
@@ -21,7 +22,7 @@ public class TestGQLSystem {
         var idf = new ItemsDataFetcher(null, null);
         var tdf = new ThingsDataFetcher(null, null);
         var sdf = new SubscriptionDataFetcher(null);
-
+        var tadf = new TagsDataFetcher(null, null);
         ItemDataFetcher itemDataFetcher = new ItemDataFetcher(null, null);
         ThingDataFetcher thingDataFetcher = new ThingDataFetcher(null, null);
 
@@ -31,7 +32,7 @@ public class TestGQLSystem {
 
         ItemCommandMutationResolver itemCommandResolver = new ItemCommandMutationResolver(null, null);
         SubscriptionGroupDataFetcher subscriptionGroupDataFetcher = new SubscriptionGroupDataFetcher(null, null);
-        GQLSystem system = new GQLSystem(idf, tdf, itemDataFetcher, thingDataFetcher, null, sdf,
+        GQLSystem system = new GQLSystem(idf, tdf, itemDataFetcher, thingDataFetcher, tadf, null, sdf,
                 subscriptionGroupDataFetcher, subscriptionItemDataFetcher, subscriptionItemsDataFetcher, itemMutationResolver, itemCommandResolver);
     }
 }
